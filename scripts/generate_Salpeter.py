@@ -9,19 +9,23 @@ def salp(fname, k, v, b, N, A):
 
     f = open(fname, 'w')
 
-    for x in range(0,N):
-        for y in range(0,N):
-            for z in range(0,N):
+    for ikx in range(1,2*N+2):
+        for iky in range(1,2*N+2):
+            for ikz in range(1,2*N+2):
 
-                kx = .5*(2*x-(N+1));
-                ky = .5*(2*y-(N+1));
-                kz = .5*(2*z-(N+1));
+                kx = ikx-N
+                ky = iky-N
+                kz = ikz-N
 
-                r = A*np.sqrt(kx*kx+ky*ky+kz*kz)
+                dx = kx+.5
+                dy = ky+.5
+                dz = kz+.5
+
+                r = A*np.sqrt(dx*dx+dy*dy+dz*dz)
 
                 salp = -k/r - v*np.exp(-b*r)/r
 
-                f.write(f'{int(kx)} {int(ky)} {int(kz+1)} {r} {salp} 0.0\n')
+                f.write(f'{kx} {ky} {kz} {salp} 0.0\n')
 
     f.close()
 
@@ -54,7 +58,8 @@ TOLERANCE	-1.
 
 // maximum # of steps to take
 // If TOLERANCE is negative, this will be the actual # of steps to take
-STEPS   	9000
+//STEPS   	9000
+STEPS   	40000
 
 // how many steps before recording measurables
 UPDATE		10
@@ -66,7 +71,7 @@ SNAPUPDATE	50
 DUMPSNAPS	4
 
 // Number of steps before recording a snap
-SNAPDUMP        250
+SNAPDUMP        500
 
 // set to one to dump the full 3d wavefncs to disk at the end of the run
 SAVEWAVEFNCS	1
@@ -100,10 +105,10 @@ SAVEPOT      1
 
 // if set, and POTENTIAL=90, the potential is a chi^2 adjustment to V(r)=A+B/r+s*r for
 // (r/A)>POTCRITR
-POTCRITR  1000
+POTCRITR  10000
 
 // if set, and POTENTIAL=90, the potential is flat for (r/A)>POTFLATR.
-POTFLATR  1000	
+POTFLATR  10000	
 
 //
 // initial condition to use
